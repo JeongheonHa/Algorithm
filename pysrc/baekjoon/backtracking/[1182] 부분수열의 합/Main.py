@@ -1,18 +1,26 @@
-def dfs(idx, sumOfNum):
-    global n, s, graph
-    cnt = 0				
-    if idx == n:				
-        return 0
-    if sumOfNum + graph[idx] == s:			
-        cnt += 1	
-        			
-    cnt += dfs(idx + 1, sumOfNum)			
-    cnt += dfs(idx + 1, sumOfNum + graph[idx])	
-
-    return cnt	
-
 n, s = map(int, input().split())
-graph = list(map(int, input().split()))
+arr = list(map(int, input().split()))
+cnt = 0
+sub_sum = 0
 
-print(dfs(0, 0))
+def dfs(idx):
+    global cnt, sub_sum
 
+    if idx == n:
+        return
+
+    if sub_sum + arr[idx] == s:
+        cnt += 1
+         
+    # 이번 원소를 포함시키지 않고 시도
+    dfs(idx+1)
+    
+    # 이번 원소를 포함시키고 시도
+    sub_sum += arr[idx]
+    dfs(idx+1)
+
+    sub_sum -= arr[idx]
+    
+
+dfs(0)
+print(cnt)
