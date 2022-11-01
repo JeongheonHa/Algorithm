@@ -1,20 +1,22 @@
-def check(num):
-    length = len(num)
-    for idx in range(1, length//2 + 1):
-        if num[-idx:] == num[-(idx*2):-idx]:
-            return False
-    else:
-        return True
+import sys
+input = sys.stdin.readline
 
-def recursive(num):
-    global N, res
-    if len(num) == N:
-        print(num)
+def check(s):
+    for i in range(1, len(s)//2+1):
+        if s[-i:] == s[-i*2:-i]:
+            return False
+    return True
+
+def dfs(s):
+    if len(s) == n:
+        print(s)
         exit()
-    for i in '123':
-        if check(num + str(i)):
-            recursive(num + str(i))
+        
+    for i in range(1, 4):
+        if check(s+str(i)):
+            dfs(s+str(i))
     return
 
-N = int(input())
-recursive('1')
+if __name__ == "__main__":
+    n = int(input())
+    dfs('1')
