@@ -3,7 +3,7 @@
 # 따라서, d[i][j]에 i부터 j까지의 행렬의 곱셈 연산이 최소가 되는 연산을 기록한다.
 # 이말은 즉, 연산 값이 최소가 되는 괄호의 위치를 저장하여 다음 값을 구할 때 해당 괄호가 적용된 값을 다시 사용하겠다는 말이다.
 # 이것을 부분 문제로 표현하면 다음과 같다.
-# d[i][j] = min(d[i][k] + d[k+1][j] + p[i]*p[k+1]*p[j+1]) for k in range(1, j-1) (if j >= i)
+# d[i][j] = min(d[i][k] + d[k+1][j] + p[i]*p[k+1]*p[j+1]) for k in range(i, j-1) (if j >= i)
 
 
 import sys
@@ -21,4 +21,3 @@ for cnt in range(n-1):
             dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j] + matrix[i][0]* matrix[k][1]* matrix[j][1])
 
 print(dp[0][-1])
-        
