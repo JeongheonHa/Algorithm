@@ -3,50 +3,54 @@ from collections import deque
 input = sys.stdin.readline
 
 
-def bfs(rsx, rsy, bsx, bsy, rotate):
-    for n in range(4):
-        cnt = 0
-        rq = deque()
-        bq = deque()
-        rq.append((rsx, rsy))
-        bq.append((bsx, bsy))
+def move(x, y, dx, dy):
+    moveCnt = 0
+    while graph[x+dx][y+dy] != '#' and graph[x][y] != 'O':
+        x += dx
+        y += dy
+        moveCnt += 1
+    return x, y, moveCnt
+        
+def bfs(rx, ry, bx, by, cnt):
+    q = deque()
+    q.append((rx, ry, bx, by, cnt))
+    visited[rx][ry][bx][by] = True
+    
+    while q:
+        rx, ry, bx, by, cnt = q.popleft()
+        
+        if cnt > 10: break
         
         for i in range(4):
-            move = False
-            i = (n + i)% 4
-            if rotate == -1:
-                i = 4-i
-                if i == -1:
-                    i = 3
+            nrx, nry, rcnt = move(rx, ry, dx[i], dy[i])
+            nbx, nby, bcnt = move(bx, by, dx[i], dy[i])
+            
+            if graph[nbx][nby] == 'O': continue
+            if graph[nrx][nry] == 'O': return cnt
+           
+        
+            if nrx == nbx and nry == nby:
+                if rcnt > bcnt:
+                    nrx -= dx[i]
+                    nry -= dy[i]
+                else:
+                    nbx -= dx[i]
+                    nby -= dy[i]
+            
+            if visited[nrx][nry][nbx][nby]: continue
+            visited[nrx][nry][nbx][nby] = True
+            q.append((nrx, nry, nbx, nby, cnt+1))
 
-            while q:
-                rx, ry = rq.popleft()
-                bx, by = bq.popleft()
+    return -1
                 
-                if graph[bx][by] == '0':
-                    return 0
-                if graph[rx][ry] == '0':
-                    return cnt
-                nrx = rx + dx[i]
-                nry = ry + dy[i]
-                nbx = bx + dx[i]
-                nby = by + dy[i]
-                
-                if 0 <= nrx < n and 0 <= nry < m and 0 <= nbx < n and 0 <= nby < m:
-                    if graph[nrx][nry] != '#' and graph[nbx][nby] != '#' and nrx != nbx and nry != nby:
-                        move = True
-                        q.append((nrx, nry, nbx, nby))
-            
-            if move == True:
-                cnt += 1
-            
     
     
 n, m = map(int, input().split())
 
 graph = []
+visited = [[[[False]*m for _ in range(n)] for _ in range(m)] for _ in range(n)]
 for i in range(n):
-    graph.append(list(map(int, input().split())))
+    graph.append(list(input().rstrip()))
     for j in range(m):
         if graph[i][j] == 'R':
             rx, ry = i, j
@@ -56,6 +60,5 @@ for i in range(n):
 dx = [-1, 0, 1, 0]
 dy = [0, -1, 0, 1]
 
-ans = min(bfs(rx, ry, bx, by, 1), bfs(rx, ry, bx, by, -1))
-
+ans = bfs(rx, ry, bx, by, 1)
 print(ans)
