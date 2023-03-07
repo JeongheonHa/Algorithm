@@ -91,14 +91,15 @@ public class Main_17135 {
 
             for (int j = 0; j < m; j++) {
                 for (int i = n - 1; i > -1; i--) {
-                    if (copyGraph[i][j] == 1 && n - i <= d) {
-                        int dist = Math.abs(archer.x - i) + Math.abs(archer.y - j);
+                    int dist = Math.abs(archer.x - i) + Math.abs(archer.y - j);
+                    if (copyGraph[i][j] == 1 && dist <= d) {
                         temp.add(new Enemy(i, j, dist));
                         break;
                     }
                 }
             }
 
+            if (temp.isEmpty()) continue;
             enemyList.add(temp.poll());
         }
 
