@@ -18,7 +18,7 @@ public class Main_7682 {
         while (true) {
             String s = scanner.next();
 
-            if (s == "end") break;
+            if (s.equals("end")) break;
 
             xRowBingo = xColBingo = 0;
             oRowBingo = oColBingo = 0;
@@ -52,7 +52,7 @@ public class Main_7682 {
 
         if (xCnt > oCnt && xBingo > 0 && oBingo == 0) return true;
         if (xCnt == oCnt && oBingo > 0 && xBingo == 0) return true;
-        if (xCnt + oCnt == 9) return true;
+        if (xCnt + oCnt == 9 && xBingo == 0 && oBingo == 0) return true;
 
         return false;
     }
