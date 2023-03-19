@@ -1,47 +1,53 @@
 package com.ribo.baekjoon;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Stack;
+import java.util.*;
 
 public class Main_1918 {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        Stack<Character> stack = new Stack<>();
-        String str = br.readLine();
-        for (int i = 0; i < str.length(); i++) {
-            char ch = str.charAt(i);
-            if ('A' <= ch && ch <= 'Z') {
-                sb.append(str.charAt(i));
-                continue;
-            }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String expression = scanner.next();
+        System.out.println(infixToPostfix(expression));
+    }
 
-            if (ch == '(') {
-                stack.push(ch);
-            } else if (ch == '*' || ch == '/') {
-                while (!stack.empty() && (stack.peek() == '*' || stack.peek() == '/')) {
-                    sb.append(stack.pop());
-                }
-                stack.push(ch);
-            } else if (ch == '-' || ch == '+') {
-                while (!stack.empty() && stack.peek() != '(') {
-                    sb.append(stack.pop());
-                }
+    public static String infixToPostfix(String expression) {
+        StringBuilder result = new StringBuilder();
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < expression.length(); i++) {
+            char ch = expression.charAt(i);
+
+            if (Character.isLetterOrDigit(ch)) {
+                result.append(ch);
+            } else if (ch == '(') {
                 stack.push(ch);
             } else if (ch == ')') {
-                while (!stack.empty() && stack.peek() != '(') {
-                    sb.append(stack.pop());
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    result.append(stack.pop());
                 }
                 stack.pop();
+            } else {
+                while (!stack.isEmpty() && getPrecedence(ch) <= getPrecedence(stack.peek())) {
+                    result.append(stack.pop());
+                }
+                stack.push(ch);
             }
-
-        }
-        while (!stack.empty()) {
-            sb.append(stack.pop());
         }
 
-        System.out.println(sb);
+        while (!stack.isEmpty()) {
+            result.append(stack.pop());
+        }
+
+        return result.toString();
+    }
+
+    private static int getPrecedence(char ch) {
+        switch (ch) {
+            case '+': case '-':
+                return 1;
+            case '*': case '/':
+                return 2;
+            default:
+                return -1;
+        }
     }
 }
