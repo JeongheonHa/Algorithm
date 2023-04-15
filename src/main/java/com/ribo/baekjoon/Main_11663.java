@@ -29,59 +29,35 @@ public class Main_11663 {
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
 
-            System.out.println(yMinusX(y, x));
+            System.out.println(rightIdx(0, n-1, y) - leftIdx(0, n-1, x) + 1);
         }
     }
 
-    private static int yMinusX(int y, int x) {
-        int right = findRightIdx(y, 0, n-1);
-        int left = findLeftIdx(x, 0, n-1);
-
-        if (left > right) return 0;
-        if (left == -1 && right == -1) return 0;
-        if (left == -1) left = 0;
-        return right - left + 1;
-    }
-
-    private static int findRightIdx(int y, int start, int end) {
-        if (y > point[n-1]) return n-1;
-        if (y < point[0]) return -1;
-
-        int ret = 0;
+    private static int rightIdx(int start, int end, int target) {
         while (start <= end) {
             int mid = (start + end) / 2;
 
-            if (point[mid] == y) {
-                return mid;
-            } else if (point[mid] > y) {
+            if (point[mid] > target) {
                 end = mid - 1;
-                ret = mid - 1;
             } else {
                 start = mid + 1;
             }
         }
 
-        return ret;
+        return end;
     }
 
-    private static int findLeftIdx(int x, int start, int end) {
-        if (x > point[n-1]) return n-1;
-        if (x < point[0]) return -1;
-
-        int ret = 0;
+    private static int leftIdx(int start, int end, int target) {
         while (start <= end) {
             int mid = (start + end) / 2;
 
-            if (point[mid] == x) {
-                return mid;
-            } else if (point[mid] > x) {
-                end = mid - 1;
-            } else {
+            if (point[mid] < target) {
                 start = mid + 1;
-                ret = mid + 1;
+            } else {
+                end = mid - 1;
             }
         }
 
-        return ret;
+        return start;
     }
 }
